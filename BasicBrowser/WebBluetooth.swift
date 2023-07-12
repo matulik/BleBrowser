@@ -16,7 +16,7 @@ public class BluetoothDevice: NSObject, CBPeripheralDelegate {
     var adData: BluetoothAdvertisingData
     var gattRequests: [CBUUID: JSRequest] = .init()
 
-    init(deviceId: String, peripheral: CBPeripheral, advertisementData: [String: AnyObject] = [String: AnyObject](), RSSI: NSNumber = 0) {
+    init(deviceId: String, peripheral: CBPeripheral, advertisementData: [String: Any] = [String: AnyObject](), RSSI: NSNumber = 0) {
         self.deviceId = deviceId
         self.peripheral = peripheral
         adData = BluetoothAdvertisingData(advertisementData: advertisementData, RSSI: RSSI)
@@ -48,6 +48,7 @@ public class BluetoothDevice: NSObject, CBPeripheralDelegate {
     }
 
     // connect services
+    
     public func peripheral(_ peripheral: CBPeripheral, didDiscoverServices _: Error?) {
         for service in peripheral.services! {
             print("found service:" + service.uuid.uuidString)
@@ -183,24 +184,20 @@ public class BluetoothDevice: NSObject, CBPeripheralDelegate {
 // MARK: - BluetoothAdvertisingData
 class BluetoothAdvertisingData {
     var appearance: String
-    var txPower: NSNumber
+    var txPower: NSNumber?
     var rssi: String
-    var manufacturerData: String
+    var manufacturerData: String?
     var serviceData: [String]
 
-    init(advertisementData: [String: AnyObject] = [String: AnyObject](), RSSI: NSNumber = 0) {
+    init(advertisementData: [String: Any] = [String: Any](), RSSI: NSNumber = 0) {
         appearance = "fakeappearance"
         let tx = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Int
         txPower = NSNumber(integerLiteral: tx ?? 0)
         rssi = "\(RSSI)"
         let data = advertisementData[CBAdvertisementDataManufacturerDataKey]
         manufacturerData = ""
-        if data != nil {
-            if let dataString = NSString(data: (data as! NSData) as Data, encoding: NSUTF8StringEncoding) as? String {
-                manufacturerData = dataString
-            } else {
-                print("Error parsing advertisement data: not a valid UTF-8 sequence")
-            }
+        if let data, let dataString = NSString(data: (data as! NSData) as Data, encoding: NSUTF8StringEncoding) as? String {
+            manufacturerData = dataString
         }
 
         var uuids = [String]()

@@ -11,6 +11,7 @@ class PopUpPickerView: UIView {
     var delegate: PopUpPickerViewDelegate? {
         didSet {
             pickerView.delegate = delegate
+            pickerView.dataSource = delegate
         }
     }
 
@@ -109,6 +110,6 @@ class PopUpPickerView: UIView {
 
 // MARK: - PopUpPickerViewDelegate
 @objc
-protocol PopUpPickerViewDelegate: UIPickerViewDelegate {
+protocol PopUpPickerViewDelegate: UIPickerViewDelegate, UIPickerViewDataSource {
     @objc optional func pickerView(pickerView: UIPickerView, didSelect numbers: [Int])
 }

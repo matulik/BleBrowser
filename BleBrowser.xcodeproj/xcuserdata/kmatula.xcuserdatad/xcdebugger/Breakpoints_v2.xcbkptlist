@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "7F334876-2A25-477C-9378-F4699A9CB8F3"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EF5F0315-2E88-4552-B0F4-6ED3CB7B65E9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BasicBrowser/WebBluetooth.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "peripheral(_:didDiscoverCharacteristicsFor:error:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EF5F0315-2E88-4552-B0F4-6ED3CB7B65E9 - 786519ef44e68461"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BleBrowser.BluetoothDevice.peripheral(_: __C.CBPeripheral, didDiscoverCharacteristicsFor: __C.CBService, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "BleBrowser"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kmatula/BleBrowser/BasicBrowser/WebBluetooth.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "63"
+                  endingLineNumber = "63"
+                  offsetFromSymbolStart = "80">
+               </Location>
+               <Location
+                  uuid = "EF5F0315-2E88-4552-B0F4-6ED3CB7B65E9 - 14d4a004ed314faa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.CBCharacteristic) -&gt; () in BleBrowser.BluetoothDevice.peripheral(_: __C.CBPeripheral, didDiscoverCharacteristicsFor: __C.CBService, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "BleBrowser"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kmatula/BleBrowser/BasicBrowser/WebBluetooth.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CAD00C53-624A-4F0F-A8F5-29E7C3C469DD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BasicBrowser/WebBluetoothManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "centralManager(_:didConnect:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CAD00C53-624A-4F0F-A8F5-29E7C3C469DD - 3ee1be10c67cc675"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BleBrowser.WebBluetoothManager.centralManager(central: __C.CBCentralManager, didConnectPeripheral: __C.CBPeripheral) -&gt; ()"
+                  moduleName = "BleBrowser"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kmatula/BleBrowser/BasicBrowser/WebBluetoothManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "148"
+                  endingLineNumber = "148"
+                  offsetFromSymbolStart = "124">
+               </Location>
+               <Location
+                  uuid = "CAD00C53-624A-4F0F-A8F5-29E7C3C469DD - 6c9359ba855f05f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BleBrowser.WebBluetoothManager.centralManager(_: __C.CBCentralManager, didConnect: __C.CBPeripheral) -&gt; ()"
+                  moduleName = "BleBrowser"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kmatula/BleBrowser/BasicBrowser/WebBluetoothManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "148"
+                  endingLineNumber = "148"
+                  offsetFromSymbolStart = "124">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
