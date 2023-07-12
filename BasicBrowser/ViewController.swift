@@ -1,24 +1,22 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, UITextFieldDelegate, WKNavigationDelegate,WKUIDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, WKNavigationDelegate, WKUIDelegate {
+    @IBOutlet var locationTextField: UITextField!
+    @IBOutlet var containerView: UIView!
 
-    @IBOutlet weak var locationTextField: UITextField!
-    @IBOutlet weak var containerView: UIView!
-    
     var devicePicker: PopUpPickerView!
-    
+
     var webView: WKWebView!
-    var webBluetoothManager:WebBluetoothManager!
-    
+    var webBluetoothManager: WebBluetoothManager!
+
     override func viewDidLoad() {
-       
         super.viewDidLoad()
         locationTextField.delegate = self
-        
-        //load polyfill script
-        var script:String?
-        if let filePath:String = NSBundle(forClass: ViewController.self).pathForResource("WebBluetooth", ofType:"js") {
+
+        // load polyfill script
+        var script: String?
+        if let filePath: String = Bundle(for: ViewController.self).path(forResource: "WebBluetooth", ofType: "js") {
             do {
                 script = try NSString(contentsOfFile: filePath, encoding: NSUTF8StringEncoding) as String
             } catch _ {
@@ -26,85 +24,80 @@ class ViewController: UIViewController, UITextFieldDelegate, WKNavigationDelegat
                 return
             }
         }
-        
-        //create bluetooth object, and set it to listen to messages
-        webBluetoothManager = WebBluetoothManager();
-        let webCfg:WKWebViewConfiguration = WKWebViewConfiguration()
-        let userController:WKUserContentController = WKUserContentController()
-        userController.addScriptMessageHandler(webBluetoothManager, name: "bluetooth")
-        
+
+        // create bluetooth object, and set it to listen to messages
+        webBluetoothManager = WebBluetoothManager()
+        let webCfg = WKWebViewConfiguration()
+        let userController = WKUserContentController()
+        userController.add(webBluetoothManager, name: "bluetooth")
+
         // connect picker
         devicePicker = PopUpPickerView()
         devicePicker.delegate = webBluetoothManager
-        self.view.addSubview(devicePicker)
+        view.addSubview(devicePicker)
         webBluetoothManager.devicePicker = devicePicker
-        
-        //add the bluetooth script prior to loading all frames
-        let userScript:WKUserScript =  WKUserScript(source: script!, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
+
+        // add the bluetooth script prior to loading all frames
+        let userScript = WKUserScript(source: script!, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
         userController.addUserScript(userScript)
-        webCfg.userContentController = userController;
-        
-        
+        webCfg.userContentController = userController
+
         webView = WKWebView(
-            frame: self.containerView.bounds,
-            configuration:webCfg
+            frame: containerView.bounds,
+            configuration: webCfg
         )
-        webView.UIDelegate = self
-        
+        webView.uiDelegate = self
+
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.allowsBackForwardNavigationGestures = true
         webView.navigationDelegate = self
         containerView.addSubview(webView)
-        
+
         let views = ["webView": webView]
-        containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[webView]|",
-            options: NSLayoutFormatOptions(), metrics: nil, views: views))
-        containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[webView]|",
-            options: NSLayoutFormatOptions(), metrics: nil, views: views))
-        
-        loadLocation("https://pauljt.github.io/bletest/") 
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[webView]|",
+                                                                    options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: views))
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[webView]|",
+                                                                    options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: views))
+
+        loadLocation(var: "https://pauljt.github.io/bletest/")
     }
-    
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        loadLocation(textField.text!)
+        loadLocation(var: textField.text!)
         return true
     }
-    
-    func loadLocation(var location: String) {
-        if !location.hasPrefix("http://") && !location.hasPrefix("https://") {
+
+    func loadLocation(`var` location: String) {
+        var location = location
+        if !location.hasPrefix("http://"), !location.hasPrefix("https://") {
             location = "http://" + location
         }
         locationTextField.text = location
-        webView.loadRequest(NSURLRequest(URL: NSURL(string: location)!))
-        
+        webView.load(NSURLRequest(url: NSURL(string: location)! as URL) as URLRequest)
     }
-    
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        locationTextField.text = webView.URL?.absoluteString
-        
+
+    func webView(_ webView: WKWebView, didFinish _: WKNavigation!) {
+        locationTextField.text = webView.url?.absoluteString
     }
-    
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        locationTextField.text = webView.URL?.absoluteString
+
+    func webView(_ webView: WKWebView, didFail _: WKNavigation!, withError error: Error) {
+        locationTextField.text = webView.url?.absoluteString
         webView.loadHTMLString("<p>Fail Navigation: \(error.localizedDescription)</p>", baseURL: nil)
     }
-    
-    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        locationTextField.text = webView.URL?.absoluteString
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation _: WKNavigation!, withError error: Error) {
+        locationTextField.text = webView.url?.absoluteString
         webView.loadHTMLString("<p>Fail Provisional Navigation: \(error.localizedDescription)</p>", baseURL: nil)
     }
-    
-    func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (() -> Void)) {
+
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         print("webView:\(webView) runJavaScriptAlertPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
-        
-        let alertController = UIAlertController(title: frame.request.URL?.host, message: message, preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in
+
+        let alertController = UIAlertController(title: frame.request.url?.host, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             completionHandler()
         }))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
-    
-    
 }

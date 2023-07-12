@@ -6,61 +6,52 @@
 //  Copyright © 2016 Stefan Arentz. All rights reserved.
 //
 
-import Foundation
 import CoreBluetooth
+import Foundation
 import WebKit
 
-class JSRequest{
-    
-    var id:Int
-    var type:String
-    var data:[String:AnyObject]
-    var webView:WKWebView
-    var resolved:Bool = false
-    
-    var deviceId:String{
-        get{
-            return (data["deviceId"] ?? "") as! String
+class JSRequest {
+    var id: Int
+    var type: String
+    var data: [String: AnyObject]
+    var webView: WKWebView
+    var resolved: Bool = false
+
+    var deviceId: String {
+        data["deviceId"] as? String ?? ""
+    }
+
+    var method: String {
+        data["method"] as? String ?? ""
+    }
+
+    var args: [String] {
+        data["args"] as? [String] ?? []
+    }
+
+    var origin: String {
+        if let url = webView.url {
+            return "\(String(describing: url.scheme)):\(url.host!):\(String(describing: url.port))"
+        } else {
+            return ""
         }
     }
-    var method:String {
-        get{
-            return (data["method"] ?? "") as! String
-        }
-    }
-    var args:[String]{
-        get{
-            return (data["args"] ?? [String]()) as! [String]
-        }
-    }
-    
-    var origin:String{
-        get{
-            if let URL = webView.URL{
-                return URL.scheme + ":" + URL.host! + ":" + String(URL.port)
-            }else{
-                return ""
-            }
-        }
-    }
-    
-    init(id:Int,type:String,data:[String:AnyObject],webView:WKWebView){
+
+    init(id: Int, type: String, data: [String: AnyObject], webView: WKWebView) {
         self.id = id
         self.type = type
         self.data = data
         self.webView = webView
     }
-    
-    func sendMessage(type:String, success:Bool, result:String, requestId:Int = -1){
-        if(self.resolved){
+
+    func sendMessage(type: String, success: Bool, result: String, requestId: Int = -1) {
+        if resolved {
             print("Warning: attempt to send a second  response to the same message")
             return
         }
         let commandString = "recieveMessage('\(type)', \(success), '\(result)',\(requestId))"
-        print("-->:",commandString)
+        print("-->:", commandString)
         webView.evaluateJavaScript(commandString, completionHandler: nil)
-        self.resolved = true
+        resolved = true
     }
-    
 }
-
